@@ -8,6 +8,7 @@ SOURCES += \
         ENCRI_DESIN.cpp \
         LZ78_ALL.cpp \
         RLE_ALL.cpp \
+        excepciones.cpp \
         main.cpp
 
 HEADERS += \
@@ -15,4 +16,5 @@ HEADERS += \
     ENCRI_DESIN.h \
     Entry.h \
     LZ78_ALL.h \
-    RLE_ALL.h
+    RLE_ALL.h \
+    excepciones.h

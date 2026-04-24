@@ -2,12 +2,13 @@
 #include <fstream>
 #include "Archivos.h"
 #include "LZ78_ALL.h"
+#include "excepciones.h"
 using namespace std;
 
 char* leerArchivo(const char* nombreArchivo) {
     ifstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
-        throw "Error: No se pudo abrir el archivo";
+        throw ERR_LECTURA;
     }
 
     string contenido;
@@ -16,6 +17,10 @@ char* leerArchivo(const char* nombreArchivo) {
         contenido += linea + "\n";
     }
     archivo.close();
+
+    if (contenido.empty()) {
+        throw ERR_VACIO;
+    }
 
     // Copiar a char*
     char* buffer = new char[contenido.length() + 1];
@@ -30,7 +35,7 @@ char* leerArchivo(const char* nombreArchivo) {
 void escribirArchivo(const char* nombreArchivo, const char* contenido) {
     ofstream archivo(nombreArchivo);
     if (!archivo.is_open()) {
-        throw "Error: No se pudo abrir el archivo de salida";
+        throw ERR_ESCRITURA;
     }
 
     archivo << contenido;

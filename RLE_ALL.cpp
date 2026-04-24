@@ -3,6 +3,7 @@
 #include "RLE_ALL.h"
 #include "ENCRI_DESIN.h"
 #include "Archivos.h"
+#include "excepciones.h"
 using namespace std;
 
 string RLE(string cadena) {
@@ -63,20 +64,7 @@ string anti_RLE(string cadena) {
 }
 
 
-string verificar_des(string cadena){
-    string v2;
-    v2 = anti_RLE(RLE(cadena));
-
-    if(cadena==v2){
-        return ":v";
-    }
-    else{
-        return ":'v";
-    }
-}
-
-
-void integrador_RLE(const char* archivoEntrada, const char* archivoSalida, int n) {
+void integrador_RLE(const char* archivoEntrada, const char* archivoSalida, int n, char clave) {
     try {
         char* texto = leerArchivo(archivoEntrada);
         string original(texto);
@@ -88,12 +76,12 @@ void integrador_RLE(const char* archivoEntrada, const char* archivoSalida, int n
         cout << "Comprimido RLE: " << comprimido << endl;
 
         string rotado = rotar_RLE(comprimido, n);
+        string encriptado = xor_RLE(rotado, clave);
+        cout<<"Aplicacion de Xor y rotacion de "<<n<<" bits: "<<encriptado<<endl;
 
-        string encriptado = xor_RLE(rotado);
-
-        string desencriptadoXOR = anti_xor_RLE(encriptado);
-
+        string desencriptadoXOR = anti_xor_RLE(encriptado, clave);
         string descomprimidoRLE = anti_rotar_RLE(desencriptadoXOR, n);
+        cout<<"Desrotacion y 2da aplicacion de la clave xor: "<<descomprimidoRLE<<endl;
 
         string final = anti_RLE(descomprimidoRLE);
 
@@ -105,6 +93,8 @@ void integrador_RLE(const char* archivoEntrada, const char* archivoSalida, int n
             cout << "VERIFICACION FALLIDA" << endl;
         }
 
+    } catch (int e) {
+        cerr << obtenerMensajeError(e) << endl;
     } catch (const char* e) {
         cerr << e << endl;
     }

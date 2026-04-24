@@ -2,6 +2,7 @@
 #include "LZ78_ALL.h"
 #include "ENCRI_DESIN.h"
 #include "Archivos.h"
+#include "excepciones.h"
 using namespace std;
 
 int largo(const char* arr) {
@@ -275,7 +276,7 @@ bool verificar(char* A, char* B) {
 
 
 
-void integrador_LZ78(const char* archivoEntrada, const char* archivoSalida, int n) {
+void integrador_LZ78(const char* archivoEntrada, const char* archivoSalida, int n, char clave) {
     try {
         char* original = leerArchivo(archivoEntrada);
         cout << "Texto original: " << original << endl;
@@ -284,14 +285,14 @@ void integrador_LZ78(const char* archivoEntrada, const char* archivoSalida, int 
         cout << "Comprimido LZ78:"<<endl << comprimido << endl;
 
         char* rotado = rotar_bits(comprimido, n);
+        char* encriptado = xor_cadena(rotado, clave);
+        cout<<"Aplicacion de Xor y rotacion de "<<n<<" bits: "<<encriptado<<endl;
 
-        char* encriptado = xor_cadena(rotado);
+        char* desencriptadoXOR = anti_xor(encriptado, clave);
+        char* desrotado = anti_rotar(desencriptadoXOR, n);
+        cout<<"Desrotacion y 2da aplicacion de la clave xor: "<<desrotado<<endl;
 
-        char* desencriptadoXOR = anti_xor(encriptado);
-
-        char* descomprimidoLZ78 = anti_rotar(desencriptadoXOR, n);
-
-        char* final = anti_lz78(descomprimidoLZ78);
+        char* final = anti_lz78(desrotado);
 
         if (verificar(original, final)) {
             cout << "VERIFICACION EXITOSA" << endl;
@@ -305,9 +306,11 @@ void integrador_LZ78(const char* archivoEntrada, const char* archivoSalida, int 
         delete[] rotado;
         delete[] encriptado;
         delete[] desencriptadoXOR;
-        delete[] descomprimidoLZ78;
+        delete[] desrotado;
         delete[] final;
 
+    } catch (int e) {
+        cerr << obtenerMensajeError(e) << endl;
     } catch (const char* e) {
         cerr << e << endl;
     }

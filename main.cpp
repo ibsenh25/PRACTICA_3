@@ -4,6 +4,8 @@
 #include "RLE_ALL.h"
 #include "ENCRI_DESIN.h"
 #include "Archivos.h"
+#include "Excepciones.h"
+
 using namespace std;
 
 int main() {
@@ -28,6 +30,9 @@ int main() {
         }
     }
 
+    char clave;
+    cout << "Ingrese un caracter como clave para el XOR: ";
+    cin >> clave;
 
     cout << "Nombre del archivo de entrada: ";
     cin >> archivoEntrada;
@@ -39,20 +44,25 @@ int main() {
         switch (opcion) {
         case 1:
             cout << "Usando RLE" << endl;
-            integrador_RLE(archivoEntrada, archivoSalida, bits);
+            integrador_RLE(archivoEntrada, archivoSalida, bits, clave);
             break;
 
         case 2:
             cout << "Usando LZ78:" << endl;
-            integrador_LZ78(archivoEntrada, archivoSalida, bits);
+            integrador_LZ78(archivoEntrada, archivoSalida, bits, clave);
             break;
 
         default:
-            cout << "Opción inválida" << endl;
+            throw ERR_OPCION_INVALIDA;
         }
-    } catch (const char* e) {
+    }
+    catch (int e) {
+        cerr << "Se produjo un error." << obtenerMensajeError(e) << endl;
+        return 0;
+    }
+    catch (const char* e) {
         cerr << "ERROR: " << e << endl;
-        return 1;
+        return 0;
     }
 
     return 0;

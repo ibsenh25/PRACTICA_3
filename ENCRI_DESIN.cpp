@@ -16,13 +16,12 @@ char* rotar_bits(const char* entrada, int n) {
     return salida;
 }
 
-char* xor_cadena(const char* entrada) {
-    char k = 0b01101011;
+char* xor_cadena(const char* entrada, char clave) {
     int len = largo(entrada);
     char* salida = new char[len + 1];
 
     for (int i = 0; i < len; i++) {
-        salida[i] = entrada[i] ^ k;
+        salida[i] = entrada[i] ^ clave;
     }
     salida[len] = '\0';
 
@@ -42,17 +41,8 @@ char* anti_rotar(const char* entrada, int n) {
     return salida;
 }
 
-char* anti_xor(const char* entrada) {
-    char k = 0b01101011;
-    int len = largo(entrada);
-    char* salida = new char[len + 1];
-
-    for (int i = 0; i < len; i++) {
-        salida[i] = entrada[i] ^ k;
-    }
-    salida[len] = '\0';
-
-    return salida;
+char* anti_xor(const char* entrada, char clave) {
+    return xor_cadena(entrada, clave);
 }
 
 
@@ -69,14 +59,13 @@ string rotar_RLE(const string& entrada, int n) {
     return salida;
 }
 
-string xor_RLE(const string& entrada) {
-    char k = 0b01101011;
+string xor_RLE(const string& entrada, char clave) {
     int len = entrada.length();
     string salida;
     salida.resize(len);
 
     for (int i = 0; i < len; i++) {
-        salida[i] = entrada[i] ^ k;
+        salida[i] = entrada[i] ^ clave;
     }
 
     return salida;
@@ -95,15 +84,6 @@ string anti_rotar_RLE(const string& entrada, int n) {
     return salida;
 }
 
-string anti_xor_RLE(const string& entrada) {
-    char k = 0b01101011;
-    int len = entrada.length();
-    string salida;
-    salida.resize(len);
-
-    for (int i = 0; i < len; i++) {
-        salida[i] = entrada[i] ^ k;
-    }
-
-    return salida;
+string anti_xor_RLE(const string& entrada, char clave) {
+    return xor_RLE(entrada, clave);
 }
